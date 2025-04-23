@@ -4,9 +4,7 @@ This is a simple example of test scripts written using **Python**, **Selenium We
 and **Allure**. 
 This framework is utilizing Page Object Model (POM). 
 conftest.py includes code to use specific chromedriver version based on your Operating System.
-**ChromeDriver** version is 85 and located inside resources folder. 
-Please update it according to your version of Google Chrome 
-installed on your machine when running locally.
+webdriver-manager is used to manage drivers for Chrome, Firefox and Edge.
 
 **Pre-requisites:**
 
