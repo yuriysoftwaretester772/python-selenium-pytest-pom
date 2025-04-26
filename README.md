@@ -30,8 +30,54 @@ Please make sure you have **pip** installed https://pip.pypa.io/en/stable/instal
 1. Right click on get-pip.py and select "save link as". Save get-pip.py somewhere on your computer (for example Downloads folder)
 2. Open terminal, navigate to Downloads folder (cd Downloads) and execute **python3 get-pip.py**
 
-
 **How to run your tests:**
+### How to Run Tests in Different Browsers
+
+You can run the tests in different browsers (Chrome, Firefox, Edge) and in headless mode using the command line or terminal. Below are the instructions:
+
+#### Run Tests in Chrome (Default Browser)
+```bash
+pytest
+```
+
+#### Run Tests in Firefox
+```bash
+pytest --browser=firefox
+```
+
+#### Run Tests in Edge
+```bash
+pytest --browser=edge
+```
+
+#### Run Tests in Headless Mode
+To run tests in headless mode, add the `--headless` flag:
+- **Chrome (Headless)**:
+  ```bash
+  pytest --headless
+  ```
+- **Firefox (Headless)**:
+  ```bash
+  pytest --browser=firefox --headless
+  ```
+- **Edge (Headless)**:
+  ```bash
+  pytest --browser=edge --headless
+  ```
+
+#### Run Specific Test Markers
+To run tests with specific markers (e.g., `regressiontest`):
+```bash
+pytest -m regressiontest
+```
+
+#### Generate Allure Reports
+After running the tests, you can generate and view Allure reports:
+```bash
+allure serve reports
+```
+
+**How to run your tests (alternative):**
  
 1. Open your PyCharm
 2. Navigate to VCS - Git - Clone and paste repository URL 
