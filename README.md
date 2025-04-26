@@ -30,6 +30,16 @@ Please make sure you have **pip** installed https://pip.pypa.io/en/stable/instal
 1. Right click on get-pip.py and select "save link as". Save get-pip.py somewhere on your computer (for example Downloads folder)
 2. Open terminal, navigate to Downloads folder (cd Downloads) and execute **python3 get-pip.py**
 
+**How to Install Dependencies:**
+
+To install all the required dependencies for this project, run the following command in your terminal:
+
+```bash
+pip install -r requirements.txt
+```
+
+This will ensure that all necessary Python packages and their versions are installed in your environment.
+
 **How to run your tests:**
 ### How to Run Tests in Different Browsers
 
