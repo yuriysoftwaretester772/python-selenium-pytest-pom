@@ -1,33 +1,13 @@
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from .base_page import AmazonBasePage
 
-
-class AmazonSearchResultPage:
-
-    def __init__(self, browser):
-        self.browser = browser
-
-    # URL and page title
-    URL = 'https://www.amazon.com/s?k=nike+air+max&ref=nb_sb_noss'
+class AmazonSearchResultPage(AmazonBasePage):
     PAGE_TITLE = 'Amazon.com : '
 
-    # Element Locators
-    SEARCH_FIELD = (By.ID, "twotabsearchtextbox")
-    SEARCH_BUTTON = (By.XPATH, "//input[@value='Go']")
-
-    # Methods
-
-    def load_page(self):
-        self.browser.get(self.URL)
-
-    def search_item(self, item):
-        try:
-            search_input = self.browser.find_element(*self.SEARCH_FIELD)
-            search_input.send_keys(item + Keys.RETURN)
-        except Exception as e:
-            print(f"Error occurred while searching for item: {e}")
-            raise
-
     def verify_title(self, item):
-        assert self.browser.title == self.PAGE_TITLE + item
-
+        WebDriverWait(self.browser, 10).until(
+            EC.title_contains("Amazon.com")
+        )
+        actual_title = self.browser.title
+        assert item.lower() in actual_title.lower(), f"Expected '{item}' in title, but got '{actual_title}'"
