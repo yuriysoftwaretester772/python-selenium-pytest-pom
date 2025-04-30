@@ -29,4 +29,5 @@ jobs:
     - name: Run tests
       run: |
         mkdir -p allure-results
-        pytest tests --alluredir=allure-results
+        pytest tests --browser=chrome --headless --alluredir=allure-results
+    
