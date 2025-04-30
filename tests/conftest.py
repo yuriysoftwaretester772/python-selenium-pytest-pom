@@ -14,6 +14,7 @@ import logging
 logging.basicConfig(level=logging.DEBUG)  # Change to DEBUG for more verbosity
 logger = logging.getLogger(__name__)
 
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
 
 def pytest_addoption(parser):
     parser.addoption(
@@ -24,7 +25,6 @@ def pytest_addoption(parser):
         "--headless", action="store_true",
         help="Run browser in headless mode"
     )
-
 
 @pytest.fixture()
 def browser(request):
@@ -37,6 +37,7 @@ def browser(request):
         if browser_name == "chrome":
             logger.debug("Setting up Chrome options")
             options = webdriver.ChromeOptions()
+            options.add_argument(f"user-agent={USER_AGENT}")
             options.add_argument("--disable-extensions")
             options.add_argument("--disable-gpu")
             options.add_argument("--no-sandbox")
@@ -53,6 +54,7 @@ def browser(request):
         elif browser_name == "firefox":
             logger.debug("Setting up Firefox options")
             options = webdriver.FirefoxOptions()
+            options.set_preference("general.useragent.override", USER_AGENT)
             options.add_argument("--disable-extensions")
             options.add_argument("--disable-notifications")
             if headless:
@@ -66,6 +68,7 @@ def browser(request):
         elif browser_name == "edge":
             logger.debug("Setting up Edge options")
             options = webdriver.EdgeOptions()
+            options.add_argument(f"user-agent={USER_AGENT}")
             options.add_argument("--disable-extensions")
             options.add_argument("--disable-gpu")
             options.add_argument("--no-sandbox")
