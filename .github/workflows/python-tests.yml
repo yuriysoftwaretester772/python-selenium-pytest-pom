@@ -26,8 +26,24 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    - name: Install Chromium browser
+      run: |
+        sudo apt update
+        sudo apt install -y chromium-browser chromium-chromedriver || true
+        sudo apt install -y chromium || true
+
+    - name: Install Chromium dependencies
+      run: |
+        sudo apt-get install -y libnss3 libgconf-2-4 libxi6 libgbm1 libasound2 libxshmfence1 libxrandr2 libxcomposite1 libxcursor1 libxdamage1 libxss1 fonts-liberation
+
     - name: Run tests
       run: |
         mkdir -p allure-results
         pytest tests --browser=chrome --headless --alluredir=allure-results
-    
+
+    - name: Upload Allure results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: allure-results
+        path: allure-results
