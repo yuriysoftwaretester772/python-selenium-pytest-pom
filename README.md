@@ -1,4 +1,5 @@
 # pytest_selenium_pom
+![Test Status](https://github.com/yuriysoftwaretester772/python-selenium-pytest-pom/actions/workflows/python-tests.yml/badge.svg)
 
 This is a simple example of test scripts written using **Python**, **Selenium WebDriver**, **PyTest**
 and **Allure**. 
