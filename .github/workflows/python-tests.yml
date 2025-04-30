@@ -41,10 +41,10 @@ jobs:
         mkdir -p allure-results
         pytest tests --browser=chrome --headless --alluredir=allure-results
 
-    - name: Upload Allure results
-      if: always()
-      uses: ./.github/actions/upload-artifact
-      with:
-        name: allure-results
-        path: allure-results
+#    - name: Upload Allure results
+#      if: always()
+#      uses: ./.github/actions/upload-artifact
+#      with:
+#        name: allure-results
+#        path: allure-results
 
