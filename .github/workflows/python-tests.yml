@@ -21,15 +21,17 @@ jobs:
       with:
         python-version: '3.9'
 
-    - name: Install dependencies
+    - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Install Chromium dependencies
+    - name: Install Chromium and dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y \
+          chromium-browser \
+          chromium-chromedriver \
           libnss3 \
           libxi6 \
           libgbm1 \
@@ -42,13 +44,12 @@ jobs:
           fonts-liberation \
           libasound2t64
 
-    - name: Install Chromium browser
-      run: |
-        sudo apt update
-        sudo apt install -y chromium-browser chromium-chromedriver || true
-        sudo apt install -y chromium || true
+    - name: Set CHROME binary path for Selenium
+      run: echo "CHROME_BIN=$(which chromium-browser || which chromium)" >> $GITHUB_ENV
 
-    - name: Run tests
+    - name: Run tests with Selenium
+      env:
+        CHROME_BIN: ${{ env.CHROME_BIN }}
       run: |
         mkdir -p allure-results
         pytest tests --browser=chrome --headless --alluredir=allure-results
