@@ -19,25 +19,37 @@ jobs:
       with:
         python-version: '3.9'
 
-    - name: Install system dependencies and Google Chrome
+    - name: Install Google Chrome
       run: |
-        sudo apt-get update
-        sudo apt-get install -y wget curl unzip xvfb libnss3 libxi6 libgbm1 libxshmfence1 \
-          libxrandr2 libxcomposite1 libxcursor1 libxdamage1 libxss1 fonts-liberation libasound2t64
+        sudo apt update
+        sudo apt install -y wget curl unzip
         wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
         sudo apt install -y ./google-chrome-stable_current_amd64.deb
 
     - name: Install matching ChromeDriver
       run: |
+        echo "Detecting Chrome version..."
         CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+')
+        echo "Detected Chrome version: $CHROME_VERSION"
+
+        if [ -z "$CHROME_VERSION" ]; then
+          echo "❌ Failed to detect Chrome version. Aborting ChromeDriver install."
+          exit 1
+        fi
+
         DRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+        echo "Resolved matching ChromeDriver version: $DRIVER_VERSION"
+
+        if [ -z "$DRIVER_VERSION" ]; then
+          echo "❌ Failed to resolve ChromeDriver version for $CHROME_VERSION"
+          exit 1
+        fi
+
         wget -q "https://chromedriver.storage.googleapis.com/$DRIVER_VERSION/chromedriver_linux64.zip"
         unzip chromedriver_linux64.zip
         sudo mv chromedriver /usr/local/bin/
         chmod +x /usr/local/bin/chromedriver
-
-    - name: Set CHROME_BIN environment variable
-      run: echo "CHROME_BIN=$(which google-chrome)" >> $GITHUB_ENV
+    
 
     - name: Install Python dependencies
       run: |
