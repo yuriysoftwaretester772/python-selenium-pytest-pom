@@ -1,4 +1,6 @@
 import os
+import shutil
+
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
@@ -50,8 +52,17 @@ def browser(request):
             options.add_argument("--disable-dev-shm-usage")
             options.add_argument("--disable-notifications")
             options.add_argument("--window-size=1920,1080")
+
             if headless:
                 options.add_argument("--headless=new")
+
+            # ✅ Set binary path for Chromium if available
+            chrome_path = os.getenv("CHROME_BIN") or shutil.which("chromium-browser") or shutil.which("chromium")
+            if chrome_path:
+                options.binary_location = chrome_path
+                logger.debug(f"Using Chrome binary at: {chrome_path}")
+            else:
+                logger.warning("Could not determine Chrome binary path.")
 
             service = ChromeService(ChromeDriverManager().install())
             driver = webdriver.Chrome(service=service, options=options)
