@@ -1,17 +1,19 @@
 import os
 import shutil
-
 import pytest
+import logging
+
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.firefox.service import Service as FirefoxService
 from selenium.webdriver.edge.service import Service as EdgeService
+
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
+
 import allure
 from allure_commons.types import AttachmentType
-import logging
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
@@ -33,7 +35,6 @@ def pytest_addoption(parser):
 def browser(request):
     logger.debug("Starting browser fixture setup")
 
-    # Defaults and GitHub Actions override
     browser_name = request.config.getoption("--browser") or "chrome"
     headless = request.config.getoption("--headless")
     if os.getenv("GITHUB_ACTIONS") == "true":
@@ -52,12 +53,12 @@ def browser(request):
             options.add_argument("--disable-dev-shm-usage")
             options.add_argument("--disable-notifications")
             options.add_argument("--window-size=1920,1080")
-
             if headless:
                 options.add_argument("--headless=new")
 
-            # ✅ Set binary path for Chromium if available
-            chrome_path = os.getenv("CHROME_BIN") or shutil.which("chromium-browser") or shutil.which("chromium")
+            # ✅ Detect Chrome binary in GitHub Actions or local system
+            chrome_path = os.getenv("CHROME_BIN") or shutil.which("google-chrome") \
+                          or shutil.which("chromium-browser") or shutil.which("chromium")
             if chrome_path:
                 options.binary_location = chrome_path
                 logger.debug(f"Using Chrome binary at: {chrome_path}")
